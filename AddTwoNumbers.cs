@@ -36,20 +36,17 @@ namespace LeetCode
 
         public static ListNode AddTwoNumbersSolve(ListNode l1, ListNode l2)
         {
-            int[] l1Values = new int[ListNodeLenght(l1)];
-            int[] l2Values = new int[ListNodeLenght(l2)];
+            ListNode temp = new ListNode((l1.val + l2.val) % 10);
+            int carry = (l1.val + l2.val) / 10;
 
-            l1Values = ListNodeValues(l1);
-            l2Values = ListNodeValues(l2);
-
-            int l1Final = l1Values.Select((t, i) => t * Convert.ToInt32(Math.Pow(10, l1Values.Length - i - 1))).Sum();
-            int l2Final = l2Values.Select((t, i) => t * Convert.ToInt32(Math.Pow(10, l2Values.Length - i - 1))).Sum();
-
-            int l3 = l1Final + l2Final;
-
-            int[] l3Values = l3.ToString().Select(o => Convert.ToInt32(o) - 48).ToArray();
-
-            return LinkNodeValues(l3Values);
+            if (l1.next != null || l2.next != null || carry > 0)
+            {
+                l1.next = l1.next ?? new ListNode(0);
+                l2.next = l2.next ?? new ListNode(0);
+                l1.next.val = l1.next.val + carry;
+                temp.next = AddTwoNumbersSolve(l1.next, l2.next);
+            }
+            return temp;
         }
 
         public static int ListNodeLenght(ListNode l1)
